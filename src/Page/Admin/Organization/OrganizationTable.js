@@ -10,24 +10,23 @@ import {
   faEraser
 } from '@fortawesome/free-solid-svg-icons';
 
-import { SkillService } from '../../../Service/data.service';
-// import SkillForm from './SkillForm';
+import { OrganizationService } from '../../../Service/data.service';
 import Label from '../../../Components/Label';
 import Input from '../../../Components/Input';
 import Button from '../../../Components/Button';
 import Alert from '../../../Components/Message';
 
-const SkillTableHeader = styled.div`
+const OrganizationTableHeader = styled.div`
   display: grid;
-  grid-template-columns: 16% 16% 16% 16% 16% 16%;
+  grid-template-columns: 25% 25% 25% 25%;
   font-size: 1.2rem;
   border-bottom: 0.1rem solid lightgray;
   padding-bottom: 0.5rem;
 `;
 
-const SkillTableRow = styled.div`
+const OrganizationTableRow = styled.div`
   display: grid;
-  grid-template-columns: 16% 16% 16% 16% 16%;
+  grid-template-columns: 25% 25% 25% 25%;
   border-bottom: 0.1rem solid lightgray;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -40,36 +39,34 @@ const SkillTableRow = styled.div`
   }
 `;
 
-const SkillTableCell = styled.div`
+const OrganizationTableCell = styled.div`
   /* display: grid;
   grid-template-columns: 10% 10%;
   align-content: start; */
 `;
 
-const SkillEditForm = styled.form`
+const OrganizationEditForm = styled.form`
   display: grid;
-  grid-template-columns: 16% 16% 16% 16% 16%;
+  grid-template-columns: 25% 25% 25% 25%;
   grid-column-gap: 0.5rem;
   align-items: center;
   justify-items: center;
   margin-top: 0.5rem;
 `;
 
-export default class SkillTable extends Component {
+export default class OrganizationTable extends Component {
   state = {
-    skills: {},
+    organizations: {},
     name: '',
     description: '',
-    level: '',
-    URL: '',
     isPublic: false,
-    skillToEdit: null,
+    organizationToEdit: null,
     showAlert: false,
     alert: ''
   };
 
   componentDidMount() {
-    this.getSkills();
+    this.getOrganizations();
   }
 
   handleInputChange = event => {
@@ -84,10 +81,10 @@ export default class SkillTable extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    if (this.state.skillToEdit) {
-      this.editSkill();
+    if (this.state.organizationToEdit) {
+      this.editOrganization();
     } else {
-      this.addSkill();
+      this.addOrganization();
     }
   };
 
@@ -95,10 +92,8 @@ export default class SkillTable extends Component {
     this.setState({
       name: '',
       description: '',
-      level: '',
-      URL: '',
       isPublic: false,
-      skillToEdit: null
+      organizationToEdit: null
     });
   };
 
@@ -116,32 +111,30 @@ export default class SkillTable extends Component {
     });
   };
 
-  fillFormWithSkillToEdit = skillToEdit => {
+  fillFormWithOrganizationToEdit = organizationToEdit => {
     if (
-      this.state.skillToEdit &&
-      this.state.skillToEdit._id === skillToEdit._id
+      this.state.organizationToEdit &&
+      this.state.organizationToEdit._id === organizationToEdit._id
     ) {
       this.cleanForm();
     } else {
       this.closeAlert();
       this.setState({
-        skillToEdit,
-        name: skillToEdit.name,
-        description: skillToEdit.description,
-        level: skillToEdit.level,
-        URL: skillToEdit.URL,
-        isPublic: skillToEdit.isPublic
+        organizationToEdit,
+        name: organizationToEdit.name,
+        description: organizationToEdit.description,
+        isPublic: organizationToEdit.isPublic
       });
     }
   };
 
   // API functions
-  getSkills = async () => {
-    await SkillService.getSkills()
-      .then(skills => {
+  getOrganizations = async () => {
+    await OrganizationService.getOrganizations()
+      .then(organizations => {
         this.cleanForm();
         this.setState({
-          skills
+          organizations
         });
       })
       .catch(error => {
@@ -150,18 +143,16 @@ export default class SkillTable extends Component {
       });
   };
 
-  addSkill = async () => {
-    const skillToAdd = {
+  addOrganization = async () => {
+    const organizationToAdd = {
       name: this.state.name,
       description: this.state.description,
-      level: this.state.level,
-      URL: this.state.URL,
       isPublic: this.state.isPublic
     };
-    await SkillService.addSkill(skillToAdd)
-      .then(skill => {
-        this.showAlert(skill.name + ' added successfully!!');
-        this.getSkills();
+    await OrganizationService.addOrganization(organizationToAdd)
+      .then(organization => {
+        this.showAlert(organization.name + ' added successfully!!');
+        this.getOrganizations();
       })
       .catch(error => {
         console.error(error);
@@ -169,18 +160,16 @@ export default class SkillTable extends Component {
       });
   };
 
-  editSkill = async () => {
-    const skillToAdd = { ...this.state.skillToEdit };
-    skillToAdd.name = this.state.name;
-    skillToAdd.description = this.state.description;
-    skillToAdd.level = this.state.level;
-    skillToAdd.URL = this.state.URL;
-    skillToAdd.isPublic = this.state.isPublic;
+  editOrganization = async () => {
+    const organizationToAdd = { ...this.state.organizationToEdit };
+    organizationToAdd.name = this.state.name;
+    organizationToAdd.description = this.state.description;
+    organizationToAdd.isPublic = this.state.isPublic;
 
-    await SkillService.editSkill(skillToAdd)
-      .then(skill => {
-        this.showAlert(skill.name + ' edited successfully!!');
-        this.getSkills();
+    await OrganizationService.editOrganization(organizationToAdd)
+      .then(organization => {
+        this.showAlert(organization.name + ' edited successfully!!');
+        this.getOrganizations();
       })
       .catch(error => {
         console.error(error);
@@ -188,11 +177,11 @@ export default class SkillTable extends Component {
       });
   };
 
-  deleteSkill = async skill => {
-    await SkillService.deleteSkill(skill._id)
+  deleteOrganization = async organization => {
+    await OrganizationService.deleteOrganization(organization._id)
       .then(() => {
-        this.showAlert(skill.name + ' deleted successfully!!');
-        this.getSkills();
+        this.showAlert(organization.name + ' deleted successfully!!');
+        this.getOrganizations();
       })
       .catch(error => {
         console.error(error);
@@ -203,20 +192,21 @@ export default class SkillTable extends Component {
   render() {
     return (
       <React.Fragment>
-        <h2>Skill's</h2>
-        <h3>New Skill</h3>
+        <h2>Organization's</h2>
+        <h3>New Organization</h3>
         {this.state.showAlert && (
           <Alert showAlert={this.state.showAlert} closeAlert={this.closeAlert}>
             {this.state.alert}
           </Alert>
         )}
-        <SkillEditForm onSubmit={this.handleSubmit} id="formSkill">
+        <OrganizationEditForm
+          onSubmit={this.handleSubmit}
+          id="formOrganization"
+        >
           <Label isValid={true}>Name</Label>
           <Label isValid={true}>Description</Label>
-          <Label isValid={true}>Level</Label>
-          {/* <Label isValid={true}>URL</Label> */}
           <Label isValid={true}>Public</Label>
-          <Label isValid={true}>Add new skill</Label>
+          <Label isValid={true}>Add new organization</Label>
           <Input
             type="text"
             id="name"
@@ -234,22 +224,6 @@ export default class SkillTable extends Component {
             onChange={this.handleInputChange}
           />
           <Input
-            type="number"
-            id="level"
-            name="level"
-            isValid={true}
-            value={this.state.level}
-            onChange={this.handleInputChange}
-          />
-          {/* <Input
-            type="text"
-            id="URL"
-            name="URL"
-            isValid={true}
-            value={this.state.URL}
-            onChange={this.handleInputChange}
-          /> */}
-          <Input
             type="checkbox"
             id="isPublic"
             name="isPublic"
@@ -258,70 +232,75 @@ export default class SkillTable extends Component {
             onChange={this.handleInputChange}
           />
           <div>
-            <Button type="submit" form="formSkill" font_size="1.5rem">
+            <Button type="submit" form="formOrganization" font_size="1.5rem">
               <FontAwesomeIcon icon={faSave} />
             </Button>
             <Button font_size="1.5rem" onClick={() => this.cleanForm()}>
               <FontAwesomeIcon icon={faEraser} />
             </Button>
           </div>
-        </SkillEditForm>
-        <h3>All the Skill</h3>
-        <SkillTableHeader>
-          <SkillTableCell>Name</SkillTableCell>
-          <SkillTableCell>Description</SkillTableCell>
-          <SkillTableCell>Level</SkillTableCell>
-          {/* <SkillTableCell>URL</SkillTableCell> */}
-          <SkillTableCell>Public</SkillTableCell>
-          <SkillTableCell>Actions</SkillTableCell>
-        </SkillTableHeader>
-        {this.state.skills.length > 0 ? (
-          Object.keys(this.state.skills).map(key => (
+        </OrganizationEditForm>
+        <h3>All the Organization</h3>
+        <OrganizationTableHeader>
+          <OrganizationTableCell>Name</OrganizationTableCell>
+          <OrganizationTableCell>Description</OrganizationTableCell>
+          <OrganizationTableCell>Public</OrganizationTableCell>
+          <OrganizationTableCell>Actions</OrganizationTableCell>
+        </OrganizationTableHeader>
+        {this.state.organizations.length > 0 ? (
+          Object.keys(this.state.organizations).map(key => (
             <React.Fragment key={key}>
-              <SkillTableRow
+              <OrganizationTableRow
                 selected={
-                  this.state.skillToEdit &&
-                  this.state.skills[key]._id === this.state.skillToEdit._id
+                  this.state.organizationToEdit &&
+                  this.state.organizations[key]._id ===
+                    this.state.organizationToEdit._id
                 }
                 onClick={() =>
-                  this.fillFormWithSkillToEdit(this.state.skills[key])
+                  this.fillFormWithOrganizationToEdit(
+                    this.state.organizations[key]
+                  )
                 }
               >
-                <SkillTableCell>{this.state.skills[key].name}</SkillTableCell>
-                <SkillTableCell>
-                  {this.state.skills[key].description}
-                </SkillTableCell>
-                <SkillTableCell>{this.state.skills[key].level}</SkillTableCell>
-                {/* <SkillTableCell>{this.state.skills[key].URL}</SkillTableCell> */}
-                <SkillTableCell>
-                  {this.state.skills[key].isPublic ? (
+                <OrganizationTableCell>
+                  {this.state.organizations[key].name}
+                </OrganizationTableCell>
+                <OrganizationTableCell>
+                  {this.state.organizations[key].description}
+                </OrganizationTableCell>
+                <OrganizationTableCell>
+                  {this.state.organizations[key].isPublic ? (
                     <FontAwesomeIcon icon={faCheck} />
                   ) : (
                     <FontAwesomeIcon icon={faTimes} />
                   )}
-                </SkillTableCell>
-                <SkillTableCell>
+                </OrganizationTableCell>
+                <OrganizationTableCell>
                   <Button
                     color="red"
-                    onClick={() => this.deleteSkill(this.state.skills[key])}
+                    onClick={() =>
+                      this.deleteOrganization(this.state.organizations[key])
+                    }
                   >
                     <FontAwesomeIcon icon={faTrash} />
                   </Button>
                   <Button
                     onClick={() =>
-                      this.fillFormWithSkillToEdit(this.state.skills[key])
+                      this.fillFormWithOrganizationToEdit(
+                        this.state.organizations[key]
+                      )
                     }
                   >
                     <FontAwesomeIcon icon={faPen} />
                   </Button>
-                </SkillTableCell>
-              </SkillTableRow>
+                </OrganizationTableCell>
+              </OrganizationTableRow>
             </React.Fragment>
           ))
         ) : (
-          <SkillTableRow>
+          <OrganizationTableRow>
             <p>No data to show</p>
-          </SkillTableRow>
+          </OrganizationTableRow>
         )}
       </React.Fragment>
     );

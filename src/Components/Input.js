@@ -93,6 +93,7 @@ const Input = props => (
   <React.Fragment>
     {(props.type === 'text' || props.type === 'number') && <InputText {...props} />}
     {props.type === 'password' && <InputText {...props} />}
+    {props.type === 'email' && <InputText {...props} />}
     {props.type === 'checkbox' && <InputCheckBox {...props} />}
     {props.type === 'textarea' && <InputTextArea {...props} />}
     {props.type === 'submit' && <InputSubmit {...props}>{props.children}</InputSubmit>}

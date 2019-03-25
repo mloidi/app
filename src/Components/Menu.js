@@ -13,6 +13,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import Auth from '../common/auth.common';
+import { AuthService } from '../Service/data.service';
 
 const MenuHeader = styled.div`
   border-bottom: 0.1rem solid #005d04;
@@ -82,88 +83,101 @@ const LogOut = styled.button`
 
 export default class Menu extends Component {
   logOut = () => {
-    Auth.deauthenticateUser();
-    window.location.reload();
+    this.logOut();
   };
 
+  logOut = async () => {
+    await AuthService.logout()
+      .then(response => {
+        Auth.deauthenticateUser();
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
   render() {
     return (
       <React.Fragment>
         <MenuHeader>
           <Logo>
             <Link className="logoLink" exact to={'/'}>
-              ml
+              {this.props.user.userName ? this.props.user.userName : 'Login'}
             </Link>
           </Logo>
-          <MenuUL>
-            <li>
-              <Link
-                className="linkA"
-                activeClassName="selected"
-                exact
-                to={'/address'}
-              >
-                <FontAwesomeIcon icon={faAddressBook} />
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="linkA"
-                activeClassName="selected"
-                exact
-                to={'/resume'}
-              >
-                <FontAwesomeIcon icon={faClipboard} />
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="linkA"
-                activeClassName="selected"
-                exact
-                to={'/blog'}
-              >
-                <FontAwesomeIcon icon={faEdit} />
-              </Link>
-            </li>
-          </MenuUL>
-          <MenuUL>
-            <li>
-              <Link
-                className="linkA"
-                activeClassName="selected"
-                exact
-                to={'/admin'}
-              >
-                <FontAwesomeIcon icon={faCogs} />
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="linkA"
-                activeClassName="selected"
-                exact
-                to={'/message'}
-              >
-                <FontAwesomeIcon icon={faEnvelope} />
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="linkA"
-                activeClassName="selected"
-                exact
-                to={'/account'}
-              >
-                <FontAwesomeIcon icon={faUser} />
-              </Link>
-            </li>
-            <li>
-              <LogOut onClick={() => this.logOut()}>
-                <FontAwesomeIcon icon={faSignOutAlt} />
-              </LogOut>
-            </li>
-          </MenuUL>
+          {Auth.isUserAuthenticated() && (
+            <React.Fragment>
+              <MenuUL>
+                <li>
+                  <Link
+                    className="linkA"
+                    activeClassName="selected"
+                    exact
+                    to={'/address'}
+                  >
+                    <FontAwesomeIcon icon={faAddressBook} />
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="linkA"
+                    activeClassName="selected"
+                    exact
+                    to={'/resume'}
+                  >
+                    <FontAwesomeIcon icon={faClipboard} />
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="linkA"
+                    activeClassName="selected"
+                    exact
+                    to={'/blog'}
+                  >
+                    <FontAwesomeIcon icon={faEdit} />
+                  </Link>
+                </li>
+              </MenuUL>
+              <MenuUL>
+                <li>
+                  <Link
+                    className="linkA"
+                    activeClassName="selected"
+                    exact
+                    to={'/admin'}
+                  >
+                    <FontAwesomeIcon icon={faCogs} />
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="linkA"
+                    activeClassName="selected"
+                    exact
+                    to={'/message'}
+                  >
+                    <FontAwesomeIcon icon={faEnvelope} />
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="linkA"
+                    activeClassName="selected"
+                    exact
+                    to={'/account'}
+                  >
+                    <FontAwesomeIcon icon={faUser} />
+                  </Link>
+                </li>
+                <li>
+                  <LogOut onClick={() => this.logOut()}>
+                    <FontAwesomeIcon icon={faSignOutAlt} />
+                  </LogOut>
+                </li>
+              </MenuUL>
+            </React.Fragment>
+          )}
         </MenuHeader>
       </React.Fragment>
     );

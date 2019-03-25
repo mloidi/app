@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 
 import { AuthService } from '../Service/data.service';
-import Auth from '../common/auth.common';
 import Label from '../Components/Label';
 import Input from '../Components/Input';
 
@@ -79,9 +78,9 @@ export default class Login extends Component {
   login = async (email, password) => {
     await AuthService.login(email, password)
       .then(response => {
-        const { accessToken, refreshToken } = response;
-        Auth.authenticateUser(accessToken, refreshToken);
-        window.location.reload();
+        const { user } = response;
+        this.props.updateUser(user);
+        this.props.history.push('/');
       })
       .catch(error => {
         this.setState({
@@ -100,7 +99,6 @@ export default class Login extends Component {
         </Helmet>
         <LoginDiv>
           <LoginForm onSubmit={this.handleSubmit}>
-            <h2>Login</h2>
             <Label isValid={this.state.emailValid}>
               {this.state.emailValid ? (
                 <React.Fragment>Email</React.Fragment>

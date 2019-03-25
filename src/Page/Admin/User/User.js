@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
 
-import SkillTable from './SkillTable';
+import UserTable from './UserTable';
 
-export default class Skill extends Component {
+export default class User extends Component {
   render() {
     return (
       <React.Fragment>
         <Helmet>
-          <title>Skills</title>
+          <title>Users</title>
         </Helmet>
-        <SkillTable {...this.props} />
+        <UserTable {...this.props} />
       </React.Fragment>
     );
   }

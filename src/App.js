@@ -19,13 +19,28 @@ import Account from './Page/Account';
 import NotFound from './Page/NotFound';
 
 class App extends Component {
+  state = {
+    user: 'Singing'
+  };
+
+  updateUser = user => {
+    this.setState({ user });
+  };
+
   render() {
     return (
       <React.Fragment>
         <Router>
           <React.Fragment>
-            {Auth.isUserAuthenticated() && <Menu />}
+            <Menu user={this.state.user} />
             <Switch>
+              <Route
+                exact
+                path="/login"
+                render={props => (
+                  <Login {...props} updateUser={this.updateUser} />
+                )}
+              />
               <Route
                 exact
                 path="/"
@@ -33,7 +48,7 @@ class App extends Component {
                   Auth.isUserAuthenticated() ? (
                     <Redirect to="/dashboard" />
                   ) : (
-                    <Login {...props} />
+                    <Redirect to="/login" />
                   )
                 }
               />
@@ -44,7 +59,7 @@ class App extends Component {
                   Auth.isUserAuthenticated() ? (
                     <Dashboard {...props} />
                   ) : (
-                    <Redirect to="/" />
+                    <Redirect to="/login" />
                   )
                 }
               />

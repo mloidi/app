@@ -2,21 +2,30 @@ import React from 'react';
 import styled from 'styled-components';
 import { Transition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+  faTimesCircle,
+  faCheckCircle
+} from '@fortawesome/free-solid-svg-icons';
 
 import Button from './Button';
 
-const MessageDiv = styled.div`
+const AlertDiv = styled.div`
   display: grid;
-  grid-template-columns: 90% 10%;
+  grid-template-columns: 10% 80% 10%;
+  align-items: center;
   font-size: 0.9rem;
   background-color: #e9f5ed;
   color: green;
   border: 0.2rem solid green;
-  padding: 1rem;
+  padding: 2rem;
   position: absolute;
   bottom: 1rem;
   right: 1rem;
+  width: 400px;
+`;
+
+const IconDiv = styled.div`
+  font-size: 1.2rem;
 `;
 
 const duration = 300;
@@ -33,22 +42,25 @@ const transitionStyles = {
   exited: { transform: 'scale(0)' }
 };
 
-const Message = ({ children, showMessage, closeMessage, type, ...props }) => (
-  <Transition in={showMessage} timeout={duration} appear={true} unmountOnExit>
+const Alert = ({ children, showAlert, closeAlert, type, ...props }) => (
+  <Transition in={showAlert} timeout={duration} appear={true} unmountOnExit>
     {state => (
-      <MessageDiv
+      <AlertDiv
         style={{
           ...defaultStyle,
           ...transitionStyles[state]
         }}
       >
-        {children}
-        <Button onClick={() => closeMessage()}>
+        <IconDiv>
+          <FontAwesomeIcon icon={faCheckCircle} />
+        </IconDiv>
+        <div>{children}</div>
+        <Button onClick={() => closeAlert()}>
           <FontAwesomeIcon icon={faTimesCircle} />
         </Button>
-      </MessageDiv>
+      </AlertDiv>
     )}
   </Transition>
 );
 
-export default Message;
+export default Alert;
