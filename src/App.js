@@ -1,139 +1,58 @@
 import React, { Component } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import styled from 'styled-components';
 
-import Auth from './common/auth.common';
-import Menu from './Components/Menu';
-import Login from './Page/Login';
-import Dashboard from './Page/Dashboard';
-import Address from './Page/Address';
-import Resume from './Page/Resume';
-import Blog from './Page/Blog';
-import Admin from './Page/Admin/Admin';
-import Message from './Page/Message';
-import Account from './Page/Account';
-import NotFound from './Page/NotFound';
+import { ContextProvider } from './globalState/state';
+import { AuthContext } from './globalState/';
+import Login from './components/login/Login';
+import Menu from './components/menu/Menu';
+import Home from './components/home/Home';
+import User from './components/user/User';
+import NotFound from './components/notFound/NotFound';
+
+export const Button = styled.button`
+  display: ${props => (props.show ? 'block' : 'none')};
+  font-size: 1rem;
+  color: rgb(161, 207, 90);
+  background-color: transparent;
+  cursor: pointer;
+  border: 0.1rem solid transparent;
+  padding: 0.3rem;
+  &:hover,
+  &:focus {
+    color: white;
+    background-color: rgb(161, 207, 90);
+    border: 0.1rem solid rgb(161, 207, 90);
+  }
+`;
 
 class App extends Component {
-  state = {
-    user: 'Singing'
-  };
-
-  updateUser = user => {
-    this.setState({ user });
-  };
-
   render() {
     return (
-      <React.Fragment>
-        <Router>
-          <React.Fragment>
-            <Menu user={this.state.user} />
-            <Switch>
-              <Route
-                exact
-                path="/login"
-                render={props => (
-                  <Login {...props} updateUser={this.updateUser} />
-                )}
-              />
-              <Route
-                exact
-                path="/"
-                render={props =>
-                  Auth.isUserAuthenticated() ? (
-                    <Redirect to="/dashboard" />
-                  ) : (
-                    <Redirect to="/login" />
-                  )
-                }
-              />
-              <Route
-                exact
-                path="/dashboard"
-                render={props =>
-                  Auth.isUserAuthenticated() ? (
-                    <Dashboard {...props} />
-                  ) : (
-                    <Redirect to="/login" />
-                  )
-                }
-              />
-              <Route
-                exact
-                path="/address"
-                render={props =>
-                  Auth.isUserAuthenticated() ? (
-                    <Address {...props} />
-                  ) : (
-                    <Redirect to="/" />
-                  )
-                }
-              />
-              <Route
-                exact
-                path="/resume"
-                render={props =>
-                  Auth.isUserAuthenticated() ? (
-                    <Resume {...props} />
-                  ) : (
-                    <Redirect to="/" />
-                  )
-                }
-              />
-              <Route
-                exact
-                path="/blog"
-                render={props =>
-                  Auth.isUserAuthenticated() ? (
-                    <Blog {...props} />
-                  ) : (
-                    <Redirect to="/" />
-                  )
-                }
-              />
-              <Route
-                exact
-                path="/admin"
-                render={props =>
-                  Auth.isUserAuthenticated() ? (
-                    <Admin {...props} />
-                  ) : (
-                    <Redirect to="/" />
-                  )
-                }
-              />
-              <Route
-                exact
-                path="/message"
-                render={props =>
-                  Auth.isUserAuthenticated() ? (
-                    <Message {...props} />
-                  ) : (
-                    <Redirect to="/" />
-                  )
-                }
-              />
-              <Route
-                exact
-                path="/account"
-                render={props =>
-                  Auth.isUserAuthenticated() ? (
-                    <Account {...props} />
-                  ) : (
-                    <Redirect to="/" />
-                  )
-                }
-              />
-              <Route component={NotFound} />
-            </Switch>
-          </React.Fragment>
-        </Router>
-      </React.Fragment>
+      <ContextProvider>
+        <AuthContext.Consumer>
+          {authContext => (
+            <React.Fragment>
+              {authContext.isAuthenticated() ? (
+                <React.Fragment>
+                  {authContext.user && (
+                    <Router>
+                      <Menu />
+                      <Switch>
+                        <Route exact path="/" component={Home} />
+                        <Route exact path="/user" component={User} />
+                        <Route component={NotFound} />
+                      </Switch>
+                    </Router>
+                  )}
+                </React.Fragment>
+              ) : (
+                <Login />
+              )}
+            </React.Fragment>
+          )}
+        </AuthContext.Consumer>
+      </ContextProvider>
     );
   }
 }
