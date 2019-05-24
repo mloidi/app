@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from 'react';
 
 import { AuthService } from '../service/auth.service';
 
-export const cookieName = 'AUTH_TOKEN';
+export const cookieName = process.env.REACT_APP_NAME + '_AUTH_TOKEN';
 
 export const AuthContext = createContext();
 

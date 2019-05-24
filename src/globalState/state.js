@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { AuthProvider } from './auth.context';
+import { AlertProvider } from './alert.context';
 
 function ProviderComposer({ context, children }) {
   return context.reduceRight(
@@ -11,7 +12,9 @@ function ProviderComposer({ context, children }) {
 
 function ContextProvider({ children }) {
   return (
-    <ProviderComposer context={[<AuthProvider />]}>{children}</ProviderComposer>
+    <ProviderComposer context={[<AuthProvider />, <AlertProvider />]}>
+      {children}
+    </ProviderComposer>
   );
 }
 

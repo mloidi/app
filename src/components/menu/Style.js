@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 export const Area = styled.div`
-  background-color: rgb(78, 78, 78);
+  background-color: ${props => props.theme.bgArea};
   padding: 1rem 2rem 0.5rem 2rem;
-  border-bottom: 0.1rem solid #ecd018;
+  border-bottom: 0.1rem solid ${props => props.theme.principalColor};
   display: grid;
   grid-template-columns: auto auto auto;
 `;
@@ -13,7 +13,7 @@ export const LogoArea = styled.div`
   grid-template-columns: auto;
   justify-content: start;
   text-transform: uppercase;
-  color: #ecd018;
+  color: ${props => props.theme.principalColor};
   font-size: 2rem;
 `;
 
@@ -33,7 +33,6 @@ export const EndArea = styled.div`
 
 
 export const MenuBar = styled.ul`
-  /* font-size: 1.2rem; */
   text-transform: uppercase;
   list-style-type: none;
   display: grid;
@@ -45,26 +44,26 @@ export const MenuBar = styled.ul`
     padding: 0.5rem 1rem;
     color: white;
     text-decoration: none;
-    border: 0.1rem solid #ecd018;
+    border: 0.1rem solid ${props => props.theme.principalColor};
     transition: border 0.5s, color 0.5s;
     cursor: pointer;
     &:hover,
     &:focus {
       outline: none;
-      color: rgb(78, 78, 78);
-      background-color: #ecd018;
-      border: 0.1rem solid #ecd018;
+      color: ${props => props.theme.bgArea};
+      background-color: ${props => props.theme.principalColor};
+      border: 0.1rem solid ${props => props.theme.principalColor};
     }
 }
 .selected {
     outline: none;
-    color: rgb(78, 78, 78);
-    background-color: #ecd018;
-    border: 0.1rem solid #ecd018;
+    color: ${props => props.theme.bgArea};
+    background-color: ${props => props.theme.principalColor};
+    border: 0.1rem solid ${props => props.theme.principalColor};
     &:hover,
     &:focus {
       outline: none;
-      color: rgb(78, 78, 78);
+      color: ${props => props.theme.bgArea};
     }
   }
 `;

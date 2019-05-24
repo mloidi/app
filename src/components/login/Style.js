@@ -3,12 +3,12 @@ import styled from 'styled-components';
 export const Area = styled.div`
   display: grid;
   position: absolute;
-  background-color: rgb(78, 78, 78);
+  background-color: ${props => props.theme.bgArea};
   width: 50%;
   left: 25%;
   top: 25%;
   padding: 1rem;
-  border: 0.1rem solid #ecd018;
+  border: 0.1rem solid ${props => props.theme.principalColor};
   z-index: 10;
 `;
 
@@ -20,7 +20,7 @@ export const Title = styled.div`
 
 export const Error = styled.div`
   color: darkred;
-  background-color: rgb(242, 154, 152);
+  background-color: ${props => props.theme.errorColor};
   margin-top: 1rem;
   margin-bottom: 1rem;
   border: 0.1rem dashed darkred;
